@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTRS — High Tech Robotic Squad</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── MEMBER LIST EXTRAS ── */
+    .members-section-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .members-sub-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .members-sub-title .badge-count {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      background: rgba(0,245,255,0.08);
+      border: 1px solid rgba(0,245,255,0.25);
+      color: var(--neon-cyan);
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 2px;
+    }
+
+    .members-sub-title.superadmin-title { color: var(--warning); }
+    .members-sub-title.member-title { color: var(--neon-blue); }
+
+    .members-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,245,255,0.15), transparent);
+      margin: 48px 0;
+    }
+
+    .members-grid-loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-dim);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+    }
+
+    .member-card-regular {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--dark-card);
+      border: 1px solid rgba(0,128,255,0.2);
+      border-radius: 8px;
+      padding: 16px 20px;
+      transition: all 0.3s ease;
+    }
+
+    .member-card-regular:hover {
+      border-color: rgba(0,128,255,0.5);
+      box-shadow: 0 0 20px rgba(0,128,255,0.08);
+      transform: translateY(-2px);
+    }
+
+    .avatar-member {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #003366, #0055aa);
+      border: 1px solid rgba(0,128,255,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .member-jabatan {
+      font-size: 0.78rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--neon-blue);
+      opacity: 0.8;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-dim);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      border: 1px dashed rgba(0,245,255,0.1);
+      border-radius: 8px;
+    }
+
+    .empty-state .empty-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      display: block;
+      opacity: 0.4;
+    }
+
+    /* Stat number animate */
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .stat-number.updated {
+      animation: countUp 0.4s ease;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SCAN EFFECT -->
+<div class="scan-effect"></div>
+
+<!-- LOADING SCREEN -->
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-logo">HTRS</div>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="index.html" class="nav-brand">HT<span>RS</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="index.html#squad" class="nav-link">Squad</a>
+    <a href="index.html#members" class="nav-link">Members</a>
+    <a href="index.html#contact" class="nav-link">Contact</a>
+  </div>
+  <div class="nav-actions" id="nav-actions"></div>
+</nav>
+
+<!-- PAGE -->
+<main class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="hero-badge">// INITIALIZED · SYSTEM ONLINE ·</div>
+    <h1 class="hero-title">HTRS</h1>
+    <div class="hero-subtitle">High Tech Robotic Squad</div>
+    <p class="hero-desc">
+      Komunitas robotika & teknologi tinggi. Berinovasi, berkolaborasi, dan membangun masa depan bersama para engineer terbaik.
+    </p>
+
+    <div class="hero-actions" id="hero-guest" style="display:none;">
+      <a href="register.html" class="btn btn-primary btn-lg">⚡ Join Squad</a>
+      <a href="login.html" class="btn btn-cyan btn-lg">🔐 Login</a>
+    </div>
+
+    <div class="hero-welcome" id="hero-welcome" style="display:none;">
+      <h2>⚡ Selamat datang, <span id="welcome-name">Squad Member</span></h2>
+      <p>Kamu telah bergabung dengan High Tech Robotic Squad. Siap beraksi?</p>
+    </div>
+  </section>
+
+  <!-- STATS (Active Members = real-time) -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <span class="stat-number" id="stat-active-members">—</span>
+      <span class="stat-label">Active Members</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">18</span>
+      <span class="stat-label">Projects Done</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">7</span>
+      <span class="stat-label">Awards Won</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">3</span>
+      <span class="stat-label">Years Active</span>
+    </div>
+  </div>
+
+  <!-- SQUAD SECTION -->
+  <section class="section" id="squad">
+    <h2 class="section-title">Tentang <span>Squad</span></h2>
+    <div class="section-line"></div>
+    <div class="cards-grid">
+      <div class="card">
+        <span class="card-icon">🤖</span>
+        <div class="card-title">Robotika Lanjutan</div>
+        <p class="card-text">Kami mengembangkan robot otonom dengan teknologi AI dan machine learning terkini untuk kompetisi nasional dan internasional.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">💡</span>
+        <div class="card-title">Inovasi Tanpa Batas</div>
+        <p class="card-text">Setiap anggota didorong untuk berpikir out-of-the-box dan menciptakan solusi teknologi yang belum pernah ada sebelumnya.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🌐</span>
+        <div class="card-title">Kolaborasi Global</div>
+        <p class="card-text">Jaringan luas dengan komunitas robotika internasional, memungkinkan pertukaran pengetahuan dan pengalaman lintas negara.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏆</span>
+        <div class="card-title">Prestasi Terbukti</div>
+        <p class="card-text">Track record kemenangan di berbagai kompetisi robotika tingkat nasional dan internasional selama 3 tahun berturut-turut.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- MEMBERS SECTION (real-time) -->
+  <section class="section" id="members">
+    <h2 class="section-title">Squad <span>Members</span></h2>
+    <div class="section-line"></div>
+
+    <div class="members-section-wrap">
+
+      <!-- CORE / SUPERADMIN -->
+      <div>
+        <div class="members-sub-title superadmin-title">
+          👑 Core Members
+          <span class="badge-count" id="core-count">0</span>
+        </div>
+        <div class="members-grid" id="core-members-grid">
+          <div class="members-grid-loading">LOADING...</div>
+        </div>
+      </div>
+
+      <div class="members-divider"></div>
+
+      <!-- REGULAR MEMBERS -->
+      <div>
+        <div class="members-sub-title member-title">
+          🧑‍💻 Members
+          <span class="badge-count" id="member-count">0</span>
+        </div>
+        <div class="members-grid" id="regular-members-grid">
+          <div class="members-grid-loading">LOADING...</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <h2 class="section-title">Hubungi <span>Kami</span></h2>
+    <div class="section-line"></div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="contact-icon">📧</div>
+        <div class="contact-label">Email</div>
+        <div class="contact-value">htrs@squad.id</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">💬</div>
+        <div class="contact-label">Discord</div>
+        <div class="contact-value">discord.gg/htrs</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📸</div>
+        <div class="contact-label">Instagram</div>
+        <div class="contact-value">@htrs.squad</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🐙</div>
+        <div class="contact-label">GitHub</div>
+        <div class="contact-value">github.com/htrs</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  © 2025 HTRS · HIGH TECH ROBOTIC SQUAD · ALL SYSTEMS OPERATIONAL
+</footer>
+
+<!-- FIREBASE CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="script.js"></script>
+
+<script>
+// ── REAL-TIME MEMBERS LISTENER (only on home page) ──
+// Called once after Firebase is ready (from script.js initHomeLoggedIn / initHomeGuest)
+function startMembersListener() {
+  if (window._membersListenerStarted) return;
+  window._membersListenerStarted = true;
+
+  const coreGrid    = document.getElementById('core-members-grid');
+  const regularGrid = document.getElementById('regular-members-grid');
+  const coreCount   = document.getElementById('core-count');
+  const memberCount = document.getElementById('member-count');
+  const statActive  = document.getElementById('stat-active-members');
+
+  db.collection('users').onSnapshot((snapshot) => {
+    const cores   = [];
+    const members = [];
+
+    snapshot.forEach(doc => {
+      const d = { id: doc.id, ...doc.data() };
+      if (d.role === 'superadmin') cores.push(d);
+      else members.push(d);
+    });
+
+    const total = cores.length + members.length;
+
+    // ── Update stat counter ──
+    if (statActive) {
+      statActive.classList.remove('updated');
+      void statActive.offsetWidth; // reflow to restart animation
+      statActive.textContent = total;
+      statActive.classList.add('updated');
+    }
+
+    // ── Badge counts ──
+    if (coreCount)   coreCount.textContent   = cores.length;
+    if (memberCount) memberCount.textContent = members.length;
+
+    // ── Render Core Members ──
+    if (coreGrid) {
+      if (cores.length === 0) {
+        coreGrid.innerHTML = `<div class="empty-state"><span class="empty-icon">👑</span>Belum ada core member.</div>`;
+      } else {
+        let html = '';
+        cores.forEach(d => {
+          const initial = (d.name || '?').charAt(0).toUpperCase();
+          const jabatan = d.jabatan && d.jabatan !== '-' ? d.jabatan : 'Leader';
+          html += `
+            <div class="member-card">
+              <div class="member-avatar">${escapeHtml(initial)}</div>
+              <div class="member-info">
+                <div class="member-name">${escapeHtml(d.name || 'Unknown')}</div>
+                <div class="member-role">👑 ${escapeHtml(jabatan)}</div>
+              </div>
+            </div>
+          `;
+        });
+        coreGrid.innerHTML = html;
+      }
+    }
+
+    // ── Render Regular Members ──
+    if (regularGrid) {
+      if (members.length === 0) {
+        regularGrid.innerHTML = `<div class="empty-state"><span class="empty-icon">🧑‍💻</span>Belum ada member. <a href="register.html" style="color:var(--neon-cyan);text-decoration:none;">Join sekarang →</a></div>`;
+      } else {
+        let html = '';
+        members.forEach(d => {
+          const initial = (d.name || '?').charAt(0).toUpperCase();
+          const jabatan = d.jabatan && d.jabatan !== '-' ? d.jabatan : 'Member';
+          html += `
+            <div class="member-card-regular">
+              <div class="avatar-member">${escapeHtml(initial)}</div>
+              <div class="member-info">
+                <div class="member-name">${escapeHtml(d.name || 'Unknown')}</div>
+                <div class="member-jabatan">🧑‍💻 ${escapeHtml(jabatan)}</div>
+              </div>
+            </div>
+          `;
+        });
+        regularGrid.innerHTML = html;
+      }
+    }
+  }, (err) => {
+    console.error('Members listener error:', err);
+    if (coreGrid)    coreGrid.innerHTML    = `<div class="empty-state">Error memuat data.</div>`;
+    if (regularGrid) regularGrid.innerHTML = `<div class="empty-state">Error memuat data.</div>`;
+  });
+}
+
+// Expose escapeHtml for inline use (also defined in script.js, safe duplicate)
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(String(str)));
+  return div.innerHTML;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — HTRS</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- SCAN EFFECT -->
+<div class="scan-effect"></div>
+
+<!-- LOADING SCREEN -->
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-logo">HTRS</div>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="index.html" class="nav-brand">HT<span>RS</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="index.html#squad" class="nav-link">Squad</a>
+    <a href="index.html#members" class="nav-link">Members</a>
+    <a href="index.html#contact" class="nav-link">Contact</a>
+  </div>
+  <div class="nav-actions" id="nav-actions"></div>
+</nav>
+
+<!-- PAGE -->
+<main class="page">
+
+  <!-- ACCESS DENIED -->
+  <div class="denied-page" id="denied-content" style="display:none;">
+    <div class="denied-code">403</div>
+    <div class="denied-msg">Access Denied — Superadmin only</div>
+    <a href="index.html" class="btn btn-cyan">← Kembali ke Home</a>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="admin-content" style="display:none;">
+    <div class="admin-page">
+
+      <div class="admin-header">
+        <div class="admin-title">
+          ⚡ Control Panel
+          <span>// SUPERADMIN ACCESS · HTRS MANAGEMENT SYSTEM</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);letter-spacing:2px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;display:inline-block;animation:pulse 2s infinite;"></span>
+            LIVE
+          </span>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;">
+        <div style="background:var(--dark-card);border:1px solid var(--border-glow);border-radius:8px;padding:20px;text-align:center;">
+          <div style="font-family:'Orbitron',sans-serif;font-size:2rem;color:var(--neon-cyan);text-shadow:0 0 15px var(--neon-cyan);" id="stat-total">—</div>
+          <div style="font-size:0.75rem;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-top:4px;">Total Users</div>
+        </div>
+        <div style="background:var(--dark-card);border:1px solid var(--border-glow);border-radius:8px;padding:20px;text-align:center;">
+          <div style="font-family:'Orbitron',sans-serif;font-size:2rem;color:var(--warning);text-shadow:0 0 15px var(--warning);" id="stat-admins">—</div>
+          <div style="font-size:0.75rem;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-top:4px;">Superadmins</div>
+        </div>
+        <div style="background:var(--dark-card);border:1px solid var(--border-glow);border-radius:8px;padding:20px;text-align:center;">
+          <div style="font-family:'Orbitron',sans-serif;font-size:2rem;color:var(--neon-blue);text-shadow:0 0 15px var(--neon-blue);" id="stat-members">—</div>
+          <div style="font-size:0.75rem;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-top:4px;">Members</div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrapper">
+        <div class="table-header">
+          <div class="table-title">USER DATABASE</div>
+          <div class="table-count" id="user-count">LOADING...</div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Current Role</th>
+                <th>Ubah Role</th>
+                <th>Jabatan</th>
+                <th>Update</th>
+                <th>Hapus</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+              <tr><td colspan="7" style="text-align:center;color:var(--text-dim);padding:40px;font-family:'Share Tech Mono',monospace;">INITIALIZING...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:10px 20px;border-top:1px solid var(--border-glow);display:flex;align-items:center;gap:8px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;display:inline-block;animation:pulse 2s infinite;"></span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);letter-spacing:2px;">LIVE · AUTO-UPDATE AKTIF</span>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div style="margin-top:20px;padding:14px 18px;background:rgba(255,170,0,0.05);border:1px solid rgba(255,170,0,0.2);border-radius:6px;font-size:0.82rem;color:var(--text-dim);font-family:'Share Tech Mono',monospace;letter-spacing:0.5px;">
+        ⚠️ Hapus user hanya menghapus data Firestore (profil). Akun Firebase Auth tidak terhapus otomatis. Perubahan role aktif saat user login ulang.
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<!-- FIREBASE CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="script.js"></script>
+
+<script>
+// ── OVERRIDE initAdminPanel to use real-time listener ──
+function initAdminPanel() {
+  const content = document.getElementById('admin-content');
+  const denied  = document.getElementById('denied-content');
+  if (content) content.style.display = 'block';
+  if (denied)  denied.style.display  = 'none';
+  startAdminListener();
+}
+
+// ── REAL-TIME LISTENER for admin table ──
+function startAdminListener() {
+  if (window._adminListenerStarted) return;
+  window._adminListenerStarted = true;
+
+  const tbody      = document.getElementById('users-tbody');
+  const countEl    = document.getElementById('user-count');
+  const statTotal  = document.getElementById('stat-total');
+  const statAdmins = document.getElementById('stat-admins');
+  const statMem    = document.getElementById('stat-members');
+
+  db.collection('users').onSnapshot((snapshot) => {
+    const count = snapshot.size;
+    let adminCount = 0, memberCount = 0;
+
+    if (countEl) countEl.textContent = `${count} RECORD${count !== 1 ? 'S' : ''}`;
+
+    if (count === 0) {
+      if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-dim);padding:32px;">No users found.</td></tr>`;
+      if (statTotal)  statTotal.textContent  = '0';
+      if (statAdmins) statAdmins.textContent = '0';
+      if (statMem)    statMem.textContent    = '0';
+      return;
+    }
+
+    let html = '';
+    snapshot.forEach(doc => {
+      const d   = doc.data();
+      const uid = doc.id;
+      if (d.role === 'superadmin') adminCount++; else memberCount++;
+
+      const roleClass = d.role === 'superadmin' ? 'role-superadmin' : 'role-member';
+      const initial   = (d.name || '?').charAt(0).toUpperCase();
+      // Protect superadmin from delete
+      const isSelf    = d.email === 'hansdpr12@gmail.com';
+      const deleteBtn = isSelf
+        ? `<button class="btn btn-sm" style="opacity:0.3;cursor:not-allowed;border:1px solid #444;color:#444;" disabled title="Tidak bisa hapus superadmin utama">🔒</button>`
+        : `<button class="btn btn-danger btn-sm" onclick="deleteUser('${uid}', '${escapeAttr(d.name || 'user')}')">🗑 Hapus</button>`;
+
+      html += `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="member-avatar" style="width:36px;height:36px;font-size:0.85rem;">${initial}</div>
+              <span>${escapeHtml(d.name || '-')}</span>
+            </div>
+          </td>
+          <td class="td-email">${escapeHtml(d.email || '-')}</td>
+          <td><span class="role-badge ${roleClass}">${d.role || 'member'}</span></td>
+          <td>
+            <select class="table-select" id="role-${uid}">
+              <option value="member"     ${d.role === 'member'     ? 'selected' : ''}>member</option>
+              <option value="superadmin" ${d.role === 'superadmin' ? 'selected' : ''}>superadmin</option>
+            </select>
+          </td>
+          <td>
+            <input class="table-input" id="jabatan-${uid}" type="text" value="${escapeHtml(d.jabatan || '-')}" />
+          </td>
+          <td>
+            <button class="btn btn-success btn-sm" onclick="updateUser('${uid}')">✔ Update</button>
+          </td>
+          <td>${deleteBtn}</td>
+        </tr>
+      `;
+    });
+
+    if (tbody)      tbody.innerHTML          = html;
+    if (statTotal)  statTotal.textContent    = count;
+    if (statAdmins) statAdmins.textContent   = adminCount;
+    if (statMem)    statMem.textContent      = memberCount;
+
+  }, (err) => {
+    console.error('Admin listener error:', err);
+    if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);padding:32px;">Error: ${err.message}</td></tr>`;
+  });
+}
+
+// ── DELETE USER (Firestore only) ──
+async function deleteUser(uid, name) {
+  const confirmed = confirm(`Hapus user "${name}" dari Firestore?\n\nData profil akan dihapus dan tidak muncul di member list.`);
+  if (!confirmed) return;
+  try {
+    await db.collection('users').doc(uid).delete();
+    showToast(`User "${name}" berhasil dihapus.`, 'success');
+    // Table auto-updates via onSnapshot
+  } catch (err) {
+    showToast('Gagal hapus user: ' + err.message, 'error');
+  }
+}
+
+// Helpers (safe to redefine)
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(String(str)));
+  return div.innerHTML;
+}
+function escapeAttr(str) {
+  return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+</script>
+
+</body>
+</html>

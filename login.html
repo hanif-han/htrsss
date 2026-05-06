@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — HTRS</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- SCAN EFFECT -->
+<div class="scan-effect"></div>
+
+<!-- LOADING SCREEN -->
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-logo">HTRS</div>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="index.html" class="nav-brand">HT<span>RS</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="index.html#squad" class="nav-link">Squad</a>
+    <a href="index.html#members" class="nav-link">Members</a>
+    <a href="index.html#contact" class="nav-link">Contact</a>
+  </div>
+  <div class="nav-actions" id="nav-actions"></div>
+</nav>
+
+<!-- PAGE -->
+<main class="page">
+  <div class="auth-page">
+
+    <!-- Decorative orbs -->
+    <div class="orb orb-1" style="position:fixed;"></div>
+    <div class="orb orb-2" style="position:fixed;"></div>
+
+    <div class="auth-box">
+      <div class="hero-badge" style="text-align:left;margin-bottom:12px;">// SECURE ACCESS ·</div>
+      <h2 class="auth-title">Login</h2>
+      <p class="auth-sub">Masuk ke sistem HTRS</p>
+
+      <div class="alert" id="login-alert"></div>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input class="form-input" type="email" id="email" placeholder="agent@htrs.squad" autocomplete="email" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" type="password" id="password" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+        <button type="submit" id="login-btn" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">
+          🔐 INITIATE LOGIN
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Belum punya akun? <a href="register.html">Join Squad →</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- FIREBASE CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
