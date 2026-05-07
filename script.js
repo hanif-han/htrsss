@@ -116,7 +116,7 @@ function renderNavbarGuest() {
 // ── PAGE HANDLERS ──
 function onUserLoggedIn(user, userData) {
   if (PAGE === 'home') {
-    initHomeLoggedIn(userData?.name || user.displayName || 'Squad Member');
+    initHomeLoggedIn(userData?.name || user.displayName || 'Squad Member', userData, user);
   } else if (PAGE === 'admin') {
     if (userData?.role === 'superadmin') {
       initAdminPanel();
@@ -131,7 +131,7 @@ function onUserGuest() {
 }
 
 // ── HOME ──
-function initHomeLoggedIn(name) {
+function initHomeLoggedIn(name, userData, user) {
   const guestSection = document.getElementById('hero-guest');
   const welcomeSection = document.getElementById('hero-welcome');
   const nameEl = document.getElementById('welcome-name');
@@ -140,6 +140,10 @@ function initHomeLoggedIn(name) {
   if (nameEl) nameEl.textContent = name;
   // Start real-time members listener
   if (typeof startMembersListener === 'function') startMembersListener();
+  // Start chat
+  if (typeof startChat === 'function' && userData && user) {
+    startChat(user.uid, userData.name || name, userData.role || 'member');
+  }
 }
 
 function initHomeGuest() {
@@ -149,6 +153,8 @@ function initHomeGuest() {
   if (welcomeSection) welcomeSection.style.display = 'none';
   // Start real-time members listener (also visible to guests)
   if (typeof startMembersListener === 'function') startMembersListener();
+  // Show chat guest banner
+  if (typeof showChatGuest === 'function') showChatGuest();
 }
 
 // ── LOGOUT ──

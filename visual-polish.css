@@ -1,0 +1,401 @@
+/* ══════════════════════════════════════════════════════════════
+   HTRS VISUAL POLISH — NEXT-GEN CYBER EFFECTS
+   visual-polish.css
+   Features: Particle BG · Advanced Loader · Cyber Cursor
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── PARTICLE CANVAS ── */
+#htrs-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════
+   ADVANCED LOADING SCREEN
+   ══════════════════════════════════ */
+
+/* Override / extend existing .loading-screen */
+.loading-screen {
+  background: #000 !important;
+  z-index: 999999 !important;
+  overflow: hidden;
+}
+
+/* Animated background bg-mesh */
+.htrs-loader-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,128,255,0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 80% 20%, rgba(112,0,255,0.1) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(0,245,255,0.08) 0%, transparent 50%),
+    #000;
+  animation: htrsLoaderBgPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes htrsLoaderBgPulse {
+  from { opacity: 0.7; }
+  to   { opacity: 1;   }
+}
+
+/* Animated grid */
+.htrs-loader-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: htrsGridMove 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes htrsGridMove {
+  from { background-position: 0 0; }
+  to   { background-position: 50px 50px; }
+}
+
+/* Content wrapper */
+.htrs-loader-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  z-index: 2;
+  padding: 24px;
+}
+
+/* ── EMBLEM / RINGS ── */
+.htrs-loader-emblem {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  flex-shrink: 0;
+}
+
+.htrs-loader-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  animation: htrsRingSpin linear infinite;
+}
+
+.htrs-ring-1 {
+  width: 140px;
+  height: 140px;
+  border-top-color: rgba(0,245,255,0.9);
+  border-right-color: rgba(0,245,255,0.3);
+  animation-duration: 2.8s;
+  box-shadow: 0 0 12px rgba(0,245,255,0.4), inset 0 0 12px rgba(0,245,255,0.08);
+}
+
+.htrs-ring-2 {
+  width: 108px;
+  height: 108px;
+  border-bottom-color: rgba(0,128,255,0.9);
+  border-left-color: rgba(0,128,255,0.3);
+  animation-duration: 2s;
+  animation-direction: reverse;
+  box-shadow: 0 0 10px rgba(0,128,255,0.3);
+}
+
+.htrs-ring-3 {
+  width: 76px;
+  height: 76px;
+  border-top-color: rgba(112,0,255,0.9);
+  border-right-color: rgba(112,0,255,0.2);
+  animation-duration: 1.4s;
+  box-shadow: 0 0 8px rgba(112,0,255,0.4);
+}
+
+@keyframes htrsRingSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Logo inside rings */
+.htrs-loader-logo-text {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: 4px;
+  color: #fff;
+  text-shadow:
+    0 0 20px rgba(0,245,255,0.9),
+    0 0 40px rgba(0,245,255,0.5),
+    0 0 80px rgba(0,245,255,0.2);
+  animation: htrsLogoPulse 2s ease-in-out infinite;
+  z-index: 1;
+  user-select: none;
+}
+
+@keyframes htrsLogoPulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(0,245,255,0.9), 0 0 40px rgba(0,245,255,0.5); opacity: 1; }
+  50%       { text-shadow: 0 0 30px rgba(0,245,255,1),   0 0 60px rgba(0,245,255,0.7); opacity: 0.85; }
+}
+
+/* ── TEXT LINES ── */
+.htrs-loader-lines {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.htrs-loader-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 5px;
+  color: rgba(0,245,255,0.5);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.htrs-loader-typing {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.88rem;
+  letter-spacing: 3px;
+  color: rgba(0,245,255,0.85);
+  min-height: 22px;
+  position: relative;
+}
+
+.htrs-loader-typing::after {
+  content: '|';
+  animation: htrsBlinkCaret 0.75s step-end infinite;
+  margin-left: 2px;
+  color: var(--neon-cyan, #00f5ff);
+}
+
+@keyframes htrsBlinkCaret {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.htrs-loader-typing.htrs-access-granted {
+  color: #00ff88;
+  text-shadow: 0 0 16px rgba(0,255,136,0.7);
+}
+
+/* ── PROGRESS BAR ── */
+.htrs-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  width: 100%;
+  max-width: 340px;
+}
+
+.htrs-progress-bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(0,245,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.htrs-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(0,128,255,0.8), rgba(0,245,255,1), rgba(0,255,136,0.8));
+  border-radius: 3px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.htrs-progress-glow {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(circle, rgba(0,245,255,0.6) 0%, transparent 70%);
+  pointer-events: none;
+  border-radius: 50%;
+  margin-right: -12px;
+}
+
+.htrs-progress-pct {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: rgba(0,245,255,0.7);
+  letter-spacing: 1px;
+  min-width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── STATUS TEXT ── */
+.htrs-loader-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  color: rgba(0,245,255,0.45);
+  transition: opacity 0.2s ease;
+  text-align: center;
+}
+
+/* ── SCANLINES OVERLAY ── */
+.htrs-loader-scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: htrsFlicker 8s step-end infinite;
+}
+
+@keyframes htrsFlicker {
+  0%,  97%, 100% { opacity: 1; }
+  97.5%           { opacity: 0.6; }
+  98%             { opacity: 1; }
+  98.5%           { opacity: 0.7; }
+  99%             { opacity: 1; }
+}
+
+/* ══════════════════════════════════
+   CYBER CURSOR
+   ══════════════════════════════════ */
+
+/* Only apply custom cursor on non-touch devices */
+@media (pointer: fine) {
+  .htrs-custom-cursor,
+  .htrs-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* Dot — snaps to mouse instantly */
+.htrs-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--neon-cyan, #00f5ff);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999998;
+  mix-blend-mode: screen;
+  box-shadow:
+    0 0 6px rgba(0,245,255,0.9),
+    0 0 12px rgba(0,245,255,0.5);
+  will-change: transform;
+  transition: width 0.15s ease, height 0.15s ease, background 0.15s ease;
+}
+
+/* Outline — lerp-follows mouse */
+.htrs-cursor-outline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(0,245,255,0.55);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999997;
+  will-change: transform;
+  box-shadow: 0 0 10px rgba(0,245,255,0.2);
+  transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover state */
+.htrs-cursor-dot.htrs-cursor-hover {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0,245,255,1), 0 0 20px rgba(0,245,255,0.6);
+}
+
+.htrs-cursor-outline.htrs-cursor-hover {
+  width: 52px;
+  height: 52px;
+  border-color: rgba(0,245,255,0.85);
+  box-shadow: 0 0 16px rgba(0,245,255,0.35), inset 0 0 16px rgba(0,245,255,0.05);
+}
+
+/* Click state */
+.htrs-cursor-dot.htrs-cursor-click {
+  transform: scale(0.7) !important;
+  background: var(--success, #00ff88);
+}
+.htrs-cursor-outline.htrs-cursor-click {
+  transform: scale(0.85) !important;
+  border-color: rgba(0,255,136,0.7);
+}
+
+/* ══════════════════════════════════
+   MOBILE OVERRIDES
+   ══════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Hide cursor elements on touch devices */
+  .htrs-cursor-dot,
+  .htrs-cursor-outline {
+    display: none !important;
+  }
+
+  /* Loading screen responsive */
+  .htrs-loader-emblem {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 20px;
+  }
+
+  .htrs-ring-1 { width: 110px; height: 110px; }
+  .htrs-ring-2 { width:  84px; height:  84px; }
+  .htrs-ring-3 { width:  58px; height:  58px; }
+
+  .htrs-loader-logo-text {
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+  }
+
+  .htrs-loader-subtitle {
+    font-size: 0.58rem;
+    letter-spacing: 3px;
+  }
+
+  .htrs-loader-typing {
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+  }
+
+  .htrs-progress-wrap {
+    max-width: 260px;
+  }
+}
+
+/* ══════════════════════════════════
+   REDUCED MOTION
+   ══════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .htrs-loader-ring,
+  .htrs-loader-grid,
+  .htrs-loader-bg,
+  .htrs-loader-logo-text,
+  .htrs-loader-scanlines {
+    animation: none !important;
+  }
+
+  .htrs-progress-fill {
+    transition: width 0.1s linear !important;
+  }
+}

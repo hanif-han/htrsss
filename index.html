@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HTRS — High Tech Robotic Squad</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="visual-polish.css" />
   <style>
     /* ── MEMBER LIST EXTRAS ── */
     .members-section-wrap {
@@ -138,9 +139,12 @@
 <nav id="navbar">
   <a href="index.html" class="nav-brand">HT<span>RS</span></a>
   <div class="nav-links">
-    <a href="index.html" class="nav-link">Home</a>
+   <a href="index.html" class="nav-link">Home</a>
+    <a href="index.html#events" class="nav-link">Events</a>
     <a href="index.html#squad" class="nav-link">Squad</a>
+    <a href="index.html#oc" class="nav-link">OC / Skins</a>
     <a href="index.html#members" class="nav-link">Members</a>
+    <a href="index.html#chat" class="nav-link">Squad Chat</a>
     <a href="index.html#contact" class="nav-link">Contact</a>
   </div>
   <div class="nav-actions" id="nav-actions"></div>
@@ -154,7 +158,7 @@
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
-    <div class="hero-badge">// INITIALIZED · SYSTEM ONLINE ·</div>
+    <div class="hero-badge">INITIALIZED · SYSTEM ONLINE ·</div>
     <h1 class="hero-title">HTRS</h1>
     <div class="hero-subtitle">High Tech Robotic Squad</div>
     <p class="hero-desc">
@@ -172,6 +176,40 @@
     </div>
   </section>
 
+   <!-- EVENTS / RAID SECTION -->
+  <section class="section" id="events">
+    <h2 class="section-title">HTRS <span>Events</span>
+      <span class="events-count-badge" id="events-count-badge">— EVENTS</span>
+    </h2>
+    <div class="section-line"></div>
+    <p style="text-align:center;color:var(--text-secondary);margin-bottom:4px;font-size:0.95rem;letter-spacing:1px;">
+      Raid, kompetisi, dan gathering squad HTRS — jangan sampai ketinggalan!
+    </p>
+    <div id="events-container"></div>
+  </section>
+
+  <!-- EVENT DETAIL MODAL -->
+  <div id="event-modal" onclick="if(event.target===this)closeEventModal()">
+    <div class="event-modal-box">
+      <button class="event-modal-close" onclick="closeEventModal()">✕</button>
+      <div class="event-modal-img-section" id="event-modal-img"></div>
+      <div class="event-modal-content">
+        <div class="event-modal-header-badge">// HTRS EVENT INTEL ·</div>
+        <div class="event-modal-title" id="event-modal-title">—</div>
+        <div class="event-modal-meta">
+          <span class="event-modal-date-label" id="event-modal-date">—</span>
+          <span id="event-modal-status"></span>
+        </div>
+        <div class="event-modal-divider"></div>
+        <div class="event-modal-desc-label">// DESCRIPTION</div>
+        <div class="event-modal-desc-text" id="event-modal-desc">—</div>
+        <div class="event-modal-footer" id="event-modal-created"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
   <!-- STATS (Active Members = real-time) -->
   <div class="stats-strip">
     <div class="stat-item">
@@ -179,15 +217,11 @@
       <span class="stat-label">Active Members</span>
     </div>
     <div class="stat-item">
-      <span class="stat-number">18</span>
+      <span class="stat-number">10</span>
       <span class="stat-label">Projects Done</span>
     </div>
     <div class="stat-item">
-      <span class="stat-number">7</span>
-      <span class="stat-label">Awards Won</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-number">3</span>
+      <span class="stat-number">1</span>
       <span class="stat-label">Years Active</span>
     </div>
   </div>
@@ -258,46 +292,282 @@
 
   <div class="divider"></div>
 
+  <!-- OC / SKIN SECTION -->
+  <section class="section" id="oc">
+    <h2 class="section-title">Squad <span>OC / Skins</span></h2>
+    <div class="section-line"></div>
+    <p style="text-align:center;color:var(--text-secondary);margin-bottom:40px;font-size:0.95rem;letter-spacing:1px;">Klik kartu untuk melihat detail & download tutorial PDF</p>
+
+    <div class="oc-grid">
+
+      <!-- SLOT 1 -->
+      <div class="oc-card" onclick="openOC('img/skin1.png','pdf/tutorial1.pdf','Cyber Pony','Unit sintetis pertama HTRS — dirancang untuk misi stealth dan cyber-recon.')">
+        <div class="oc-card-inner">
+          <div class="oc-img-wrap">
+            <div class="oc-placeholder-art">🤖</div>
+          </div>
+          <div class="oc-info">
+            <div class="oc-name">Cyber Pony</div>
+            <div class="oc-tag">// UNIT-01 · STEALTH</div>
+          </div>
+          <div class="oc-hover-line"></div>
+        </div>
+      </div>
+
+      <!-- SLOT 2 -->
+      <div class="oc-card" onclick="openOC('img/skin2.png','pdf/tutorial2.pdf','Neon Striker','Unit serbu garis depan dengan armor neon-reactive dan boost reactor.')">
+        <div class="oc-card-inner">
+          <div class="oc-img-wrap">
+            <div class="oc-placeholder-art">⚡</div>
+          </div>
+          <div class="oc-info">
+            <div class="oc-name">Neon Striker</div>
+            <div class="oc-tag">// UNIT-02 · ASSAULT</div>
+          </div>
+          <div class="oc-hover-line"></div>
+        </div>
+      </div>
+
+      <!-- SLOT 3 -->
+      <div class="oc-card" onclick="openOC('img/skin3.png','pdf/tutorial3.pdf','Ghost Protocol','Unit tak kasat mata — master kamuflase frekuensi & interferensi sinyal.')">
+        <div class="oc-card-inner">
+          <div class="oc-img-wrap">
+            <div class="oc-placeholder-art">👻</div>
+          </div>
+          <div class="oc-info">
+            <div class="oc-name">Ghost Protocol</div>
+            <div class="oc-tag">// UNIT-03 · PHANTOM</div>
+          </div>
+          <div class="oc-hover-line"></div>
+        </div>
+      </div>
+
+      <!-- SLOT 4 -->
+      <div class="oc-card" onclick="openOC('img/skin4.png','pdf/tutorial4.pdf','Iron Pulse','Unit pertahanan berat — perisai magnetik dan pulse cannon generasi ke-4.')">
+        <div class="oc-card-inner">
+          <div class="oc-img-wrap">
+            <div class="oc-placeholder-art">🛡️</div>
+          </div>
+          <div class="oc-info">
+            <div class="oc-name">Iron Pulse</div>
+            <div class="oc-tag">// UNIT-04 · TANK</div>
+          </div>
+          <div class="oc-hover-line"></div>
+        </div>
+      </div>
+
+      <!-- SLOT 5 -->
+      <div class="oc-card" onclick="openOC('img/skin5.png','pdf/tutorial5.pdf','Volt Nexus','Unit komando — pengendali drone armada dan sistem AI tempur otonom.')">
+        <div class="oc-card-inner">
+          <div class="oc-img-wrap">
+            <div class="oc-placeholder-art">🌐</div>
+          </div>
+          <div class="oc-info">
+            <div class="oc-name">Volt Nexus</div>
+            <div class="oc-tag">// UNIT-05 · COMMAND</div>
+          </div>
+          <div class="oc-hover-line"></div>
+        </div>
+      </div>
+
+      <!-- SLOT 6 -->
+      <div class="oc-card" onclick="openOC('img/skin6.png','pdf/tutorial6.pdf','Cryo Blade','Unit kriogenik — senjata suhu ultra-rendah untuk melumpuhkan sistem musuh.')">
+        <div class="oc-card-inner">
+          <div class="oc-img-wrap">
+            <div class="oc-placeholder-art">❄️</div>
+          </div>
+          <div class="oc-info">
+            <div class="oc-name">Cryo Blade</div>
+            <div class="oc-tag">// UNIT-06 · CRYO</div>
+          </div>
+          <div class="oc-hover-line"></div>
+        </div>
+      </div>
+
+      <!-- COMING SOON x4 -->
+      <div class="oc-card oc-soon">
+        <div class="oc-card-inner">
+          <div class="oc-img-wrap">
+            <div class="oc-placeholder-art" style="opacity:0.3;">?</div>
+          </div>
+          <div class="oc-info">
+            <div class="oc-name" style="color:var(--text-dim);">Incoming Soon</div>
+            <div class="oc-tag">// CLASSIFIED</div>
+          </div>
+          <div class="oc-soon-badge">LOCKED</div>
+        </div>
+      </div>
+      <div class="oc-card oc-soon">
+        <div class="oc-card-inner">
+          <div class="oc-img-wrap">
+            <div class="oc-placeholder-art" style="opacity:0.3;">?</div>
+          </div>
+          <div class="oc-info">
+            <div class="oc-name" style="color:var(--text-dim);">Incoming Soon</div>
+            <div class="oc-tag">// CLASSIFIED</div>
+          </div>
+          <div class="oc-soon-badge">LOCKED</div>
+        </div>
+      </div>
+      <div class="oc-card oc-soon">
+        <div class="oc-card-inner">
+          <div class="oc-img-wrap">
+            <div class="oc-placeholder-art" style="opacity:0.3;">?</div>
+          </div>
+          <div class="oc-info">
+            <div class="oc-name" style="color:var(--text-dim);">Incoming Soon</div>
+            <div class="oc-tag">// CLASSIFIED</div>
+          </div>
+          <div class="oc-soon-badge">LOCKED</div>
+        </div>
+      </div>
+      <div class="oc-card oc-soon">
+        <div class="oc-card-inner">
+          <div class="oc-img-wrap">
+            <div class="oc-placeholder-art" style="opacity:0.3;">?</div>
+          </div>
+          <div class="oc-info">
+            <div class="oc-name" style="color:var(--text-dim);">Incoming Soon</div>
+            <div class="oc-tag">// CLASSIFIED</div>
+          </div>
+          <div class="oc-soon-badge">LOCKED</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- OC MODAL -->
+  <div id="oc-modal" class="oc-modal-overlay" onclick="closeOC(event)">
+    <div class="oc-modal-box">
+      <button class="oc-modal-close" onclick="closeOCBtn()">✕</button>
+      <div class="oc-modal-header">// OC FILE UNLOCKED ·</div>
+      <div class="oc-modal-img-wrap">
+        <div id="oc-modal-art" class="oc-modal-art"></div>
+      </div>
+      <div class="oc-modal-name" id="oc-modal-name">—</div>
+      <div class="oc-modal-desc" id="oc-modal-desc">—</div>
+      <a id="oc-pdf-link" href="#" target="_blank" class="btn btn-cyan" style="margin-top:20px;justify-content:center;">
+        📄 Download Tutorial PDF
+      </a>
+      <p style="margin-top:10px;font-size:0.75rem;color:var(--text-dim);font-family:'Share Tech Mono',monospace;text-align:center;letter-spacing:1px;">
+        * Ganti URL PDF di script sesuai file asli
+      </p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GLOBAL SQUAD CHAT -->
+  <section class="section" id="chat">
+    <h2 class="section-title">Global Squad <span>Chat</span></h2>
+    <div class="section-line"></div>
+
+    <!-- Guest Banner -->
+    <div id="chat-guest-banner" class="chat-guest-banner" style="display:none;">
+      <span>🔐</span>
+      <span>Login untuk bergabung di Squad Chat</span>
+      <a href="login.html" class="btn btn-primary btn-sm">Login</a>
+    </div>
+
+    <!-- Chat Panel -->
+    <div class="chat-panel" id="chat-panel" style="display:none;">
+
+      <div class="chat-topbar">
+        <div class="chat-topbar-left">
+          <span class="chat-live-dot"></span>
+          <span class="chat-topbar-label">LIVE · GLOBAL SQUAD CHAT</span>
+        </div>
+        <div id="chat-online-count" class="chat-online-count">— online</div>
+      </div>
+
+      <!-- Messages Box -->
+      <div id="chat-box" class="chat-box"></div>
+
+      <!-- Input Area -->
+      <div class="chat-input-area">
+        <div class="chat-input-wrap">
+          <input
+            id="chat-input"
+            class="chat-input"
+            type="text"
+            placeholder="Type a message… (Enter to send)"
+            maxlength="300"
+            autocomplete="off"
+          />
+          <span id="chat-char-count" class="chat-char-count">300</span>
+        </div>
+        <button id="chat-send-btn" class="btn btn-primary chat-send-btn" onclick="sendMessage()">
+          ➤ Send
+        </button>
+      </div>
+
+      <!-- Toxic Alert -->
+      <div id="chat-toxic-alert" class="chat-toxic-alert" style="display:none;">
+        ⚠️ Pesan mengandung kata terlarang.
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
   <!-- CONTACT -->
   <section class="section" id="contact">
     <h2 class="section-title">Hubungi <span>Kami</span></h2>
     <div class="section-line"></div>
     <div class="contact-grid">
-      <div class="contact-item">
-        <div class="contact-icon">📧</div>
-        <div class="contact-label">Email</div>
-        <div class="contact-value">htrs@squad.id</div>
-      </div>
-      <div class="contact-item">
+
+      <a href="https://discord.gg/3zCrYbUaH" target="_blank" class="contact-item contact-link">
         <div class="contact-icon">💬</div>
         <div class="contact-label">Discord</div>
-        <div class="contact-value">discord.gg/htrs</div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon">📸</div>
-        <div class="contact-label">Instagram</div>
-        <div class="contact-value">@htrs.squad</div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon">🐙</div>
-        <div class="contact-label">GitHub</div>
-        <div class="contact-value">github.com/htrs</div>
-      </div>
+        <div class="contact-value">discord.gg/High Tech Robotic Squad</div>
+        <div class="contact-cta">Join Server →</div>
+      </a>
+
+      <a href="https://tiktok.com/@hightechroboticsquad_" target="_blank" class="contact-item contact-link">
+        <div class="contact-icon">【ꚠ】𝗧𝗶𝗸t𝗼𝗸</div>
+        <div class="contact-label">Tiktok</div>
+        <div class="contact-value">@hightechroboticsquad_</div>
+        <div class="contact-cta">Follow →</div>
+      </a>
+
+      <a href="https://chat.whatsapp.com/BchNsm5b7hk8xHCidi7nbo" target="_blank" class="contact-item contact-link">
+        <div class="contact-icon">📱</div>
+        <div class="contact-label">WhatsApp</div>
+        <div class="contact-value">High Tech Robotic Squad</div>
+        <div class="contact-cta">Gabung Sekarang →</div>
+      </a>
+
     </div>
   </section>
 
 </main>
+
 
 <!-- FOOTER -->
 <footer>
   © 2025 HTRS · HIGH TECH ROBOTIC SQUAD · ALL SYSTEMS OPERATIONAL
 </footer>
 
+<!-- BACKGROUND MUSIC -->
+<audio id="bg-music" loop preload="none">
+ <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<!-- MUSIC TOGGLE BUTTON -->
+<div id="music-btn" onclick="toggleMusic()" title="Toggle Background Music">
+  <span id="music-icon">🎵</span>
+  <span id="music-label">MUSIC</span>
+</div>
+
 <!-- FIREBASE CDN -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <script src="script.js"></script>
+<script src="events.js"></script>
 
 <script>
 // ── REAL-TIME MEMBERS LISTENER (only on home page) ──
@@ -305,6 +575,8 @@
 function startMembersListener() {
   if (window._membersListenerStarted) return;
   window._membersListenerStarted = true;
+  // Also start events
+  if (typeof startEventsListener === 'function') startEventsListener();
 
   const coreGrid    = document.getElementById('core-members-grid');
   const regularGrid = document.getElementById('regular-members-grid');
@@ -396,5 +668,275 @@ function escapeHtml(str) {
 }
 </script>
 
+<script>
+// ── OC / SKIN SYSTEM ──
+function openOC(imgSrc, pdfHref, name, desc) {
+  const modal   = document.getElementById('oc-modal');
+  const artEl   = document.getElementById('oc-modal-art');
+  const nameEl  = document.getElementById('oc-modal-name');
+  const descEl  = document.getElementById('oc-modal-desc');
+  const pdfLink = document.getElementById('oc-pdf-link');
+
+  // Show image if path exists, else show emoji placeholder
+  artEl.innerHTML = `<img src="${imgSrc}" onerror="this.style.display='none';this.nextSibling.style.display='block';" style="width:100%;height:100%;object-fit:contain;border-radius:8px;" /><div style="display:none;font-size:4rem;text-align:center;padding:40px;">${getOCEmoji(name)}</div>`;
+  nameEl.textContent  = name;
+  descEl.textContent  = desc;
+  pdfLink.href        = pdfHref;
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function getOCEmoji(name) {
+  const map = {'Cyber Pony':'🤖','Neon Striker':'⚡','Ghost Protocol':'👻','Iron Pulse':'🛡️','Volt Nexus':'🌐','Cryo Blade':'❄️'};
+  return map[name] || '🎮';
+}
+
+function closeOCBtn() {
+  const modal = document.getElementById('oc-modal');
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function closeOC(e) {
+  if (e.target === document.getElementById('oc-modal')) closeOCBtn();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeOCBtn();
+});
+
+// ── BACKGROUND MUSIC ──
+let musicPlaying = false;
+const music = document.getElementById('bg-music');
+
+function toggleMusic() {
+  const icon  = document.getElementById('music-icon');
+  const label = document.getElementById('music-label');
+  const btn   = document.getElementById('music-btn');
+
+  if (!musicPlaying) {
+    music.play().then(() => {
+      musicPlaying = true;
+      icon.textContent  = '🔊';
+      label.textContent = 'ON';
+      btn.classList.add('music-on');
+    }).catch(() => {});
+  } else {
+    music.pause();
+    musicPlaying = false;
+    icon.textContent  = '🎵';
+    label.textContent = 'MUSIC';
+    btn.classList.remove('music-on');
+  }
+}
+
+// Auto-play on first user interaction (non-intrusive)
+document.addEventListener('click', () => {
+  if (!musicPlaying && music.paused) {
+    music.play().then(() => {
+      musicPlaying = true;
+      document.getElementById('music-icon').textContent  = '🔊';
+      document.getElementById('music-label').textContent = 'ON';
+      document.getElementById('music-btn').classList.add('music-on');
+    }).catch(() => {});
+  }
+}, { once: true });
+</script>
+
+<script>
+// ══════════════════════════════════════════
+//  GLOBAL SQUAD CHAT
+// ══════════════════════════════════════════
+
+const BANNED_WORDS = [
+  "anjing","kontol","memek","bangsat","babi","tolol",
+  "jancok","asu","goblok","tai","kampret","keparat",
+  "bajingan","sialan","idiot","bodoh"
+];
+
+let chatUser     = null;   // { uid, name, role }
+let chatListener = null;
+let _chatStarted = false;
+
+// Called from script.js hooks after auth resolves
+function startChat(uid, name, role) {
+  if (_chatStarted) return;
+  _chatStarted = true;
+  chatUser = { uid, name, role };
+
+  document.getElementById('chat-panel').style.display = 'block';
+  document.getElementById('chat-guest-banner').style.display = 'none';
+
+  listenMessages();
+  setupChatInput();
+}
+
+function showChatGuest() {
+  document.getElementById('chat-guest-banner').style.display = 'flex';
+  document.getElementById('chat-panel').style.display = 'none';
+}
+
+// ── INPUT HELPERS ──
+function setupChatInput() {
+  const input   = document.getElementById('chat-input');
+  const counter = document.getElementById('chat-char-count');
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  input.addEventListener('input', () => {
+    const remaining = 300 - input.value.length;
+    counter.textContent = remaining;
+    counter.style.color = remaining < 30 ? 'var(--danger)' : 'var(--text-dim)';
+  });
+}
+
+// ── TOXIC CHECK ──
+function containsToxic(text) {
+  const lower = text.toLowerCase();
+  return BANNED_WORDS.some(w => lower.includes(w));
+}
+
+function showToxicAlert() {
+  const el = document.getElementById('chat-toxic-alert');
+  el.style.display = 'flex';
+  setTimeout(() => { el.style.display = 'none'; }, 3500);
+}
+
+// ── SEND ──
+async function sendMessage() {
+  if (!chatUser) return;
+  const input = document.getElementById('chat-input');
+  const text  = input.value.trim();
+  if (!text) return;
+
+  if (containsToxic(text)) { showToxicAlert(); return; }
+
+  const btn = document.getElementById('chat-send-btn');
+  btn.disabled = true;
+
+  try {
+    await db.collection('messages').add({
+      username:  chatUser.name,
+      uid:       chatUser.uid,
+      role:      chatUser.role,
+      text:      text,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    input.value = '';
+    document.getElementById('chat-char-count').textContent = '300';
+  } catch (err) {
+    console.error('Send failed:', err);
+  } finally {
+    btn.disabled = false;
+    input.focus();
+  }
+}
+
+// ── LISTEN ──
+function listenMessages() {
+  if (chatListener) chatListener();
+
+  chatListener = db.collection('messages')
+    .orderBy('createdAt', 'asc')
+    .onSnapshot((snapshot) => {
+      const box = document.getElementById('chat-box');
+      if (!box) return;
+
+      const wasAtBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
+
+      // Diff-update: only add new, remove deleted
+      const existingIds = new Set([...box.querySelectorAll('[data-msg-id]')].map(el => el.dataset.msgId));
+      const incomingIds = new Set();
+
+      snapshot.forEach(docSnap => {
+        const id   = docSnap.id;
+        const data = docSnap.data();
+        incomingIds.add(id);
+
+        if (!existingIds.has(id)) {
+          // New message — create element
+          const msgEl = buildMessageEl(id, data);
+          box.appendChild(msgEl);
+          // Entrance animation
+          requestAnimationFrame(() => msgEl.classList.add('visible'));
+        }
+      });
+
+      // Remove deleted messages
+      existingIds.forEach(id => {
+        if (!incomingIds.has(id)) {
+          const el = box.querySelector(`[data-msg-id="${id}"]`);
+          if (el) el.remove();
+        }
+      });
+
+      // Update online count with total messages as proxy
+      const total = snapshot.size;
+      const onlineEl = document.getElementById('chat-online-count');
+      if (onlineEl) onlineEl.textContent = `${total} message${total !== 1 ? 's' : ''}`;
+
+      if (wasAtBottom) box.scrollTop = box.scrollHeight;
+    }, (err) => {
+      console.error('Chat listener error:', err);
+    });
+}
+
+// ── BUILD MESSAGE ELEMENT ──
+function buildMessageEl(id, data) {
+  const isSelf     = chatUser && data.uid === chatUser.uid;
+  const isAdmin    = data.role === 'superadmin';
+  const canDelete  = chatUser && chatUser.role === 'superadmin';
+
+  const time = data.createdAt
+    ? data.createdAt.toDate().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' })
+    : '...';
+
+  const div = document.createElement('div');
+  div.dataset.msgId = id;
+  div.className     = `chat-msg ${isSelf ? 'chat-msg-self' : ''} ${isAdmin ? 'chat-msg-admin' : ''}`;
+
+  const roleBadge = isAdmin
+    ? `<span class="chat-role-badge admin-badge">👑 SUPERADMIN</span>`
+    : `<span class="chat-role-badge member-badge">🧑‍💻 MEMBER</span>`;
+
+  const deleteBtn = canDelete
+    ? `<button class="chat-delete-btn" onclick="deleteMessage('${id}')" title="Hapus pesan">🗑</button>`
+    : '';
+
+  div.innerHTML = `
+    <div class="chat-msg-header">
+      <span class="chat-msg-name">${escapeHtmlChat(data.username || 'Unknown')}</span>
+      ${roleBadge}
+      <span class="chat-msg-time">${time}</span>
+      ${deleteBtn}
+    </div>
+    <div class="chat-msg-text">${escapeHtmlChat(data.text || '')}</div>
+  `;
+
+  return div;
+}
+
+// ── DELETE ──
+async function deleteMessage(id) {
+  if (!chatUser || chatUser.role !== 'superadmin') return;
+  if (!confirm('Hapus pesan ini?')) return;
+  try {
+    await db.collection('messages').doc(id).delete();
+  } catch (err) {
+    console.error('Delete failed:', err);
+  }
+}
+
+function escapeHtmlChat(str) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(String(str)));
+  return d.innerHTML;
+}
+</script>
+
+<script src="visual-polish.js"></script>
 </body>
 </html>

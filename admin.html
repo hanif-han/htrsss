@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel — HTRS</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="visual-polish.css" />
 </head>
 <body>
 
@@ -22,8 +23,11 @@
   <a href="index.html" class="nav-brand">HT<span>RS</span></a>
   <div class="nav-links">
     <a href="index.html" class="nav-link">Home</a>
+    <a href="index.html#events" class="nav-link">Events</a>
     <a href="index.html#squad" class="nav-link">Squad</a>
+    <a href="index.html#oc" class="nav-link">OC / Skins</a>
     <a href="index.html#members" class="nav-link">Members</a>
+    <a href="index.html#chat" class="nav-link">Squad Chat</a>
     <a href="index.html#contact" class="nav-link">Contact</a>
   </div>
   <div class="nav-actions" id="nav-actions"></div>
@@ -107,6 +111,99 @@
         ⚠️ Hapus user hanya menghapus data Firestore (profil). Akun Firebase Auth tidak terhapus otomatis. Perubahan role aktif saat user login ulang.
       </div>
 
+      <!-- EVENT MANAGEMENT PANEL -->
+      <div class="admin-events-panel" id="admin-events-panel">
+
+        <div class="admin-events-panel-title">
+          🎮 Event / Raid Management
+        </div>
+        <div class="admin-events-panel-sub">// TAMBAH, EDIT, HAPUS EVENT SQUAD ·</div>
+
+        <!-- Alert -->
+        <div class="alert" id="event-form-alert"></div>
+
+        <!-- Add Event Form -->
+        <div style="background:rgba(0,245,255,0.03);border:1px solid rgba(0,245,255,0.12);border-radius:10px;padding:24px;margin-bottom:28px;">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:3px;color:var(--text-dim);margin-bottom:18px;text-transform:uppercase;border-bottom:1px solid rgba(0,245,255,0.1);padding-bottom:10px;">
+            ⚡ Tambah Event Baru
+          </div>
+
+          <div class="event-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="event-title">Event Title *</label>
+              <input class="form-input" type="text" id="event-title" placeholder="Nama event / raid" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="event-date">Tanggal Event *</label>
+              <input class="form-input" type="date" id="event-date" />
+            </div>
+            <div class="form-group event-form-full">
+              <label class="form-label" for="event-description">Description</label>
+              <textarea class="form-input" id="event-description" rows="3" placeholder="Deskripsi event, jadwal, peraturan..." style="resize:vertical;min-height:80px;font-family:'Rajdhani',sans-serif;"></textarea>
+            </div>
+            <div class="form-group event-form-full">
+              <label class="form-label" for="event-image">Banner / Foto Event (opsional)</label>
+              <input class="form-input" type="file" id="event-image" accept="image/*"
+                onchange="previewEventImage('event-image','event-image-preview-wrap','event-image-preview-img')"
+                style="padding:8px;" />
+              <div class="event-image-preview-wrap" id="event-image-preview-wrap">
+                <img id="event-image-preview-img" src="" alt="preview" />
+              </div>
+            </div>
+          </div>
+
+          <button id="event-add-btn" class="btn btn-primary" onclick="addEvent()" style="display:flex;align-items:center;gap:8px;">
+            ⚡ ADD EVENT
+          </button>
+        </div>
+
+        <!-- Events List -->
+        <div class="admin-events-list-wrap">
+          <div class="admin-events-list-title">// DAFTAR EVENTS</div>
+          <div id="admin-events-list">
+            <div class="admin-events-empty">LOADING...</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EDIT EVENT MODAL -->
+  <div id="edit-event-modal" onclick="if(event.target===this)closeEditEventModal()">
+    <div class="edit-event-modal-box">
+      <button class="event-modal-close" onclick="closeEditEventModal()">✕</button>
+      <div class="edit-event-modal-title">✏ Edit Event</div>
+
+      <div class="alert" id="edit-event-alert"></div>
+
+      <div class="form-group">
+        <label class="form-label" for="edit-event-title">Event Title *</label>
+        <input class="form-input" type="text" id="edit-event-title" placeholder="Nama event" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="edit-event-date">Tanggal Event</label>
+        <input class="form-input" type="date" id="edit-event-date" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="edit-event-description">Description</label>
+        <textarea class="form-input" id="edit-event-description" rows="3" style="resize:vertical;min-height:80px;font-family:'Rajdhani',sans-serif;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="edit-event-image">Ganti Banner (opsional)</label>
+        <input class="form-input" type="file" id="edit-event-image" accept="image/*" style="padding:8px;" />
+        <div id="edit-event-current-img" style="margin-top:10px;display:none;"></div>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:20px;">
+        <button id="edit-event-save-btn" class="btn btn-success" onclick="saveEditEvent()" style="flex:1;justify-content:center;">
+          💾 SAVE CHANGES
+        </button>
+        <button class="btn btn-sm" onclick="closeEditEventModal()" style="border:1px solid rgba(255,255,255,0.15);color:var(--text-secondary);">
+          Cancel
+        </button>
+      </div>
     </div>
   </div>
 
@@ -116,7 +213,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <script src="script.js"></script>
+<script src="events.js"></script>
 
 <script>
 // ── OVERRIDE initAdminPanel to use real-time listener ──
@@ -126,6 +225,7 @@ function initAdminPanel() {
   if (content) content.style.display = 'block';
   if (denied)  denied.style.display  = 'none';
   startAdminListener();
+  if (typeof initAdminEvents === 'function') initAdminEvents();
 }
 
 // ── REAL-TIME LISTENER for admin table ──
@@ -229,5 +329,6 @@ function escapeAttr(str) {
 }
 </script>
 
+<script src="visual-polish.js"></script>
 </body>
 </html>
