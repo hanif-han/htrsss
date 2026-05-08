@@ -2204,3 +2204,50 @@ footer {
   background: rgba(0,245,255,0.2);
   border-radius: 2px;
 }
+
+/* ═════════════════════════════
+   MOBILE OPTIMIZATION
+═════════════════════════════ */
+
+@media (max-width:768px){
+
+  body{
+    overflow-x:hidden;
+  }
+
+  img{
+    max-width:100%;
+  }
+
+  .hero-title{
+    line-height:1.1;
+  }
+
+  .hero-actions{
+    flex-direction:column;
+    width:100%;
+  }
+
+  .section{
+    padding:40px 16px;
+  }
+
+  .oc-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+  }
+
+  .oc-img-wrap{
+    height:140px;
+  }
+
+  .oc-modal-box{
+    max-height:90vh;
+    overflow-y:auto;
+  }
+
+  .chat-msg{
+    max-width:100%;
+  }
+
+}
