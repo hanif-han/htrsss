@@ -6,6 +6,7 @@
   <title>Admin Panel — HTRS</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="visual-polish.css" />
+  <link rel="stylesheet" href="community.css" />
 </head>
 <body>
 
@@ -165,10 +166,45 @@
           </div>
         </div>
 
-      </div>
+      </div><!-- end admin-events-panel -->
 
-    </div>
-  </div>
+      <!-- ═══ COMMUNITY SYSTEM SECTION ═══ -->
+      <div id="admin-community-section" style="margin-top:40px;">
+
+        <div style="margin-bottom:24px;padding:20px 0 16px;border-top:1px solid rgba(0,245,255,0.12);">
+          <div style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:var(--neon-cyan);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;">
+            👁 Community Monitor
+          </div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);letter-spacing:2px;">
+            // XP LEADERBOARD · ACTIVITY LOG · MEMBER ANALYTICS
+          </div>
+        </div>
+
+        <!-- Member XP Overview Stats -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:28px;" id="community-stats-row">
+          <div style="background:var(--dark-card);border:1px solid rgba(255,215,0,0.2);border-radius:8px;padding:18px;text-align:center;">
+            <div style="font-family:'Orbitron',sans-serif;font-size:1.8rem;color:#ffd700;text-shadow:0 0 15px rgba(255,215,0,0.5);" id="cs-total-xp">—</div>
+            <div style="font-size:0.72rem;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-top:4px;">Total XP Squad</div>
+          </div>
+          <div style="background:var(--dark-card);border:1px solid rgba(0,255,136,0.2);border-radius:8px;padding:18px;text-align:center;">
+            <div style="font-family:'Orbitron',sans-serif;font-size:1.8rem;color:#00ff88;text-shadow:0 0 15px rgba(0,255,136,0.5);" id="cs-online-now">—</div>
+            <div style="font-size:0.72rem;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-top:4px;">Online Now</div>
+          </div>
+          <div style="background:var(--dark-card);border:1px solid rgba(180,112,255,0.2);border-radius:8px;padding:18px;text-align:center;">
+            <div style="font-family:'Orbitron',sans-serif;font-size:1.8rem;color:#b470ff;text-shadow:0 0 15px rgba(180,112,255,0.5);" id="cs-total-badges">—</div>
+            <div style="font-size:0.72rem;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-top:4px;">Total Badges</div>
+          </div>
+          <div style="background:var(--dark-card);border:1px solid rgba(0,128,255,0.2);border-radius:8px;padding:18px;text-align:center;">
+            <div style="font-family:'Orbitron',sans-serif;font-size:1.8rem;color:var(--neon-blue);text-shadow:0 0 15px rgba(0,128,255,0.5);" id="cs-log-count">—</div>
+            <div style="font-size:0.72rem;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-top:4px;">Log Entries</div>
+          </div>
+        </div>
+
+        <!-- Leaderboard + Activity Log loaded by community.js -->
+
+      </div><!-- end community section -->
+
+    </div><!-- end admin-page -->
 
   <!-- EDIT EVENT MODAL -->
   <div id="edit-event-modal" onclick="if(event.target===this)closeEditEventModal()">
@@ -216,6 +252,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <script src="script.js"></script>
 <script src="events.js"></script>
+<script src="community.js"></script>
 
 <script>
 // ── OVERRIDE initAdminPanel to use real-time listener ──
@@ -226,6 +263,35 @@ function initAdminPanel() {
   if (denied)  denied.style.display  = 'none';
   startAdminListener();
   if (typeof initAdminEvents === 'function') initAdminEvents();
+  // Community monitor — load after short delay so DOM is ready
+  setTimeout(() => {
+    if (typeof initActivityMonitor === 'function') initActivityMonitor();
+    loadCommunityStats();
+  }, 500);
+}
+
+// ── COMMUNITY STATS (admin) ──
+function loadCommunityStats() {
+  db.collection('users').onSnapshot(snap => {
+    let totalXP = 0, totalBadges = 0, onlineNow = 0;
+    const now = Date.now();
+    snap.forEach(doc => {
+      const d = doc.data();
+      totalXP    += (d.xp || 0);
+      totalBadges += (d.badges || []).length;
+      const ls = d.lastSeen?.toDate?.()?.getTime() || 0;
+      if (now - ls < 3 * 60 * 1000) onlineNow++;
+    });
+    const el = id => document.getElementById(id);
+    if (el('cs-total-xp'))    el('cs-total-xp').textContent    = totalXP.toLocaleString();
+    if (el('cs-online-now'))  el('cs-online-now').textContent  = onlineNow;
+    if (el('cs-total-badges'))el('cs-total-badges').textContent= totalBadges;
+  });
+
+  db.collection('activityLog').get().then(snap => {
+    const el = document.getElementById('cs-log-count');
+    if (el) el.textContent = snap.size;
+  });
 }
 
 // ── REAL-TIME LISTENER for admin table ──

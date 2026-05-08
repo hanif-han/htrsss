@@ -96,12 +96,15 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 // ── NAVBAR ──
+// Note: community.js overrides this with richer profile button.
+// Kept as fallback for pages that don't load community.js.
 function renderNavbarLoggedIn(name) {
   const actions = document.getElementById('nav-actions');
   if (!actions) return;
+  // community.js will replace this via buildNavbarProfile()
+  // Set a temp placeholder so something shows during load
   actions.innerHTML = `
-    <a href="admin.html" class="btn btn-cyan btn-sm">⚡ Super Admin</a>
-    <button onclick="doLogout()" class="btn btn-danger btn-sm">↩ Logout</button>
+    <span style="font-family:'Share Tech Mono',monospace;font-size:0.78rem;color:var(--text-dim);letter-spacing:2px;">LOADING...</span>
   `;
 }
 
@@ -115,6 +118,11 @@ function renderNavbarGuest() {
 
 // ── PAGE HANDLERS ──
 function onUserLoggedIn(user, userData) {
+  // Boot community system for logged-in user
+  if (typeof initCommunityForUser === 'function') {
+    initCommunityForUser(user, userData);
+  }
+
   if (PAGE === 'home') {
     initHomeLoggedIn(userData?.name || user.displayName || 'Squad Member', userData, user);
   } else if (PAGE === 'admin') {
@@ -127,7 +135,10 @@ function onUserLoggedIn(user, userData) {
 }
 
 function onUserGuest() {
-  if (PAGE === 'home') initHomeGuest();
+  if (PAGE === 'home') {
+    initHomeGuest();
+    if (typeof initCommunityForGuest === 'function') initCommunityForGuest();
+  }
 }
 
 // ── HOME ──
