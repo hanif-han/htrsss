@@ -619,9 +619,12 @@ function startMembersListener() {
         cores.forEach(d => {
           const initial = (d.name || '?').charAt(0).toUpperCase();
           const jabatan = d.jabatan && d.jabatan !== '-' ? d.jabatan : 'Leader';
+          const avatarContent = d.photoURL
+            ? `<img src="${escapeHtml(d.photoURL)}" alt="${escapeHtml(initial)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;">${escapeHtml(initial)}</span>`
+            : escapeHtml(initial);
           html += `
             <div class="member-card">
-              <div class="member-avatar">${escapeHtml(initial)}</div>
+              <div class="member-avatar" style="overflow:hidden;position:relative;">${avatarContent}</div>
               <div class="member-info">
                 <div class="member-name">${escapeHtml(d.name || 'Unknown')}</div>
                 <div class="member-role">👑 ${escapeHtml(jabatan)}</div>
@@ -642,9 +645,12 @@ function startMembersListener() {
         members.forEach(d => {
           const initial = (d.name || '?').charAt(0).toUpperCase();
           const jabatan = d.jabatan && d.jabatan !== '-' ? d.jabatan : 'Member';
+          const avatarContent = d.photoURL
+            ? `<img src="${escapeHtml(d.photoURL)}" alt="${escapeHtml(initial)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;">${escapeHtml(initial)}</span>`
+            : escapeHtml(initial);
           html += `
             <div class="member-card-regular">
-              <div class="avatar-member">${escapeHtml(initial)}</div>
+              <div class="avatar-member" style="overflow:hidden;position:relative;">${avatarContent}</div>
               <div class="member-info">
                 <div class="member-name">${escapeHtml(d.name || 'Unknown')}</div>
                 <div class="member-jabatan">🧑‍💻 ${escapeHtml(jabatan)}</div>

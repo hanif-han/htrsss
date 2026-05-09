@@ -28,8 +28,8 @@ const RECENT_TIMEOUT  = 15 * 60 * 1000;  // 15 min → "Recently Active"
 const PRESENCE_PING   = 60 * 1000;       // update lastSeen every 1 min
 
 const BADGE_DEFS = [
-  { id: 'founder',  label: '🏆 Founder',     cls: 'badge-founder',  desc: 'Anggota pendiri HTRS' },
-  { id: 'leader',   label: '👑 Leader',      cls: 'badge-leader',   desc: 'Pemimpin squad' },
+  { id: 'master',  label: '🏆 Master',     cls: 'badge-master',  desc: 'Anggota Aktif HTRS' },
+  { id: 'warrior',   label: '👑 Warrior',      cls: 'badge-warrior',   desc: 'Winner' },
   { id: 'veteran',  label: '🎖 Veteran',     cls: 'badge-veteran',  desc: 'Member setia 30+ hari' },
   { id: 'elite',    label: '⚡ Elite Squad', cls: 'badge-elite',    desc: 'Level 10+' },
   { id: 'active',   label: '🟢 Active',      cls: 'badge-active',   desc: 'Aktif di community' },
@@ -697,31 +697,61 @@ window.triggerAvatarUpload = function() {
 
 window.handleAvatarUpload = async function(input) {
   if (!input.files || !input.files[0] || !_currentUser) return;
+
   const file = input.files[0];
 
-  // Validate
-  if (!file.type.startsWith('image/')) { showToastNotif('❌', 'Error', 'File harus berupa gambar.'); return; }
-  if (file.size > 3 * 1024 * 1024)    { showToastNotif('❌', 'Error', 'Ukuran maksimal 3MB.'); return; }
+  if (!file.type.startsWith('image/')) {
+    showToastNotif('❌', 'Error', 'File harus berupa gambar.');
+    return;
+  }
 
-  showToastNotif('⏳', 'Uploading...', 'Sedang mengupload foto profil...');
+  if (file.size > 3 * 1024 * 1024) {
+    showToastNotif('❌', 'Error', 'Ukuran maksimal 3MB.');
+    return;
+  }
+
+  showToastNotif('⏳', 'Uploading...', 'Sedang upload foto profil...');
 
   try {
-    const storage = firebase.storage();
-    const ref     = storage.ref(`avatars/${_currentUser.uid}`);
-
-    // Compress: draw to canvas
     const compressed = await compressImage(file, 300, 300, 0.7);
-    await ref.put(compressed);
-    const url = await ref.getDownloadURL();
 
-    await db.collection('users').doc(_currentUser.uid).update({ photoURL: url });
-    _currentProfile = { ..._currentProfile, photoURL: url };
+    const formData = new FormData();
+    formData.append("file", compressed);
+    formData.append("upload_preset", "ml_default");
 
-    // Update avatar in modal
-    const avatarEl = document.getElementById('pm-avatar');
-    if (avatarEl) {
-      avatarEl.innerHTML = `<img src="${esc(url)}" alt="avatar" /><div class="avatar-upload-overlay">UPLOAD</div>`;
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/dzern2l91/image/upload",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const data = await response.json();
+
+    if (!data.secure_url) {
+      throw new Error("Upload gagal");
     }
+
+    const url = data.secure_url;
+
+    await db.collection('users').doc(_currentUser.uid).update({
+      photoURL: url
+    });
+
+    _currentProfile = {
+      ..._currentProfile,
+      photoURL: url
+    };
+
+    const avatarEl = document.getElementById('pm-avatar');
+
+    if (avatarEl) {
+      avatarEl.innerHTML =
+        '<img src="' + url + '" alt="avatar" />' +
+        '<div class="avatar-upload-overlay">UPLOAD</div>';
+    }
+
     updateNavbarProfile(_currentProfile);
     showToastNotif('✅', 'Berhasil!', 'Foto profil berhasil diperbarui.');
     logActivity(_currentUser.uid, _currentProfile?.name || 'User', 'profile', 'Mengganti foto profil');
